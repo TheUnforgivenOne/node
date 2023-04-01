@@ -1,0 +1,27 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "task11": "node src/task1/task_1_1.js",
+    "task12": "node src/task1/task_1_2.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheUnforgivenOne/node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheUnforgivenOne/node/issues"
+  },
+  "homepage": "https://github.com/TheUnforgivenOne/node#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "dependencies": {
+    "csvtojson": "^2.0.10"
+  }
+}
