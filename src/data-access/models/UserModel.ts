@@ -2,27 +2,27 @@ import { DataTypes } from 'sequelize';
 import getDbConnection from '../dbConnection';
 
 const getUserModel = () => {
-  return getDbConnection().define('user', {
+  return getDbConnection().define('User', {
     id: {
-      type: DataTypes.STRING,
       allowNull: false,
       primaryKey: true,
+      type: DataTypes.STRING,
     },
     login: {
-      type: DataTypes.STRING,
       allowNull: false,
+      type: DataTypes.STRING,
     },
     password: {
-      type: DataTypes.STRING,
       allowNull: false,
+      type: DataTypes.STRING,
     },
     age: {
-      type: DataTypes.INTEGER,
       allowNull: false,
+      type: DataTypes.INTEGER,
     },
     isDeleted: {
-      type: DataTypes.BOOLEAN,
       allowNull: false,
+      type: DataTypes.BOOLEAN,
     },
   });
 };

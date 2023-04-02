@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
+    "db:migrate": "cd src/data-access && sequelize-cli db:migrate",
     "task11": "node src/task1/task_1_1.js",
     "task12": "node src/task1/task_1_2.js"
   },
@@ -21,7 +22,8 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "sequelize-cli": "^6.6.0"
   },
   "repository": {
     "type": "git",
