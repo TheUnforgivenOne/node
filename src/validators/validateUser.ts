@@ -1,5 +1,13 @@
 import Joi, { ValidationError } from 'joi';
-import { INewUser, IUser } from '../types/entities';
+
+const mapJoiErrors = (error: ValidationError) =>
+  error.details.reduce(
+    (errors, error) => ({
+      ...errors,
+      [error.path[0]]: error.message,
+    }),
+    {}
+  );
 
 const passwordPattern = /(?=.*[A-Za-z])(?=.*[0-9])/;
 
@@ -17,17 +25,22 @@ const updatedUserSchema = Joi.object().keys({
   isDeleted: Joi.boolean(),
 });
 
-export const validateNewUser = (user: INewUser) =>
-  newUserSchema.validate(user, { abortEarly: false });
+export const validateNewUser = (req, res, next) => {
+  const userDTO = req.body;
 
-export const validateUpdatedUser = (user: Partial<IUser>) =>
-  updatedUserSchema.validate(user, { abortEarly: false });
+  const { error } = newUserSchema.validate(userDTO, { abortEarly: false });
+  if (error?.isJoi)
+    return res.status(400).json({ message: mapJoiErrors(error) });
 
-export const mapErrors = (error: ValidationError) =>
-  error.details.reduce(
-    (errors, error) => ({
-      ...errors,
-      [error.path[0]]: error.message,
-    }),
-    {}
-  );
+  next();
+};
+
+export const validateUpdatedUser = (req, res, next) => {
+  const userDTO = req.body;
+
+  const { error } = updatedUserSchema.validate(userDTO, { abortEarly: false });
+  if (error?.isJoi)
+    return res.status(400).json({ message: mapJoiErrors(error) });
+
+  next();
+};
