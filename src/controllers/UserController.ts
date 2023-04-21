@@ -10,14 +10,14 @@ class UserController {
 
   constructor(options?: RouterOptions) {
     this.router = Router(options);
-    this.router.get('/:id', this.getUser);
-    this.router.get('/', this.getUsers);
-    this.router.post('/', validateNewUser, this.createUser);
-    this.router.put('/:id', validateUpdatedUser, this.updateUser);
-    this.router.delete('/:id', this.deleteUser);
+    this.router.get('/:id', this.getOne);
+    this.router.get('/', this.getMany);
+    this.router.post('/', validateNewUser, this.create);
+    this.router.put('/:id', validateUpdatedUser, this.update);
+    this.router.delete('/:id', this.delete);
   }
 
-  private async getUser(req, res) {
+  private async getOne(req, res) {
     const { id: userId } = req.params;
 
     const user = await UserService.getUser(userId);
@@ -25,13 +25,13 @@ class UserController {
     res.json({ data: { user } });
   }
 
-  private async getUsers(req, res) {
+  private async getMany(req, res) {
     const users = await UserService.getUsers(req.query);
 
     res.json({ data: { users } });
   }
 
-  private async createUser(req, res) {
+  private async create(req, res) {
     const newUserData = req.body;
 
     const newUser = await UserService.createUser(newUserData);
@@ -39,7 +39,7 @@ class UserController {
     res.json({ data: { newUser } });
   }
 
-  private async updateUser(req, res) {
+  private async update(req, res) {
     const { id: userId } = req.params;
     const updatedData = req.body;
 
@@ -48,7 +48,7 @@ class UserController {
     res.json({ data: { updatedUser } });
   }
 
-  private async deleteUser(req, res) {
+  private async delete(req, res) {
     const { id: userId } = req.params;
 
     const deletedUser = await UserService.deleteUser(userId);
