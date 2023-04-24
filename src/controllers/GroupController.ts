@@ -1,5 +1,9 @@
 import { Router, RouterOptions } from 'express';
 import GroupService from '../services/GroupService';
+import {
+  validateNewGroup,
+  validateUpdatedGroup,
+} from '../validators/validateGroup';
 
 class GroupController {
   public router: Router;
@@ -8,8 +12,8 @@ class GroupController {
     this.router = Router(options);
     this.router.get('/:id', this.getOne);
     this.router.get('/', this.getMany);
-    this.router.post('/', this.create);
-    this.router.put('/:id', this.update);
+    this.router.post('/', validateNewGroup, this.create);
+    this.router.put('/:id', validateUpdatedGroup, this.update);
     this.router.delete('/:id', this.delete);
   }
 

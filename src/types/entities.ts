@@ -17,8 +17,6 @@ export enum Permission {
   UPLOAD_FILES = 'UPLOAD_FILES',
 }
 
-// export type Permission = 'READ' | 'WRITE' | 'DELETE' | 'SHARE' | 'UPLOAD_FILES';
-
 export type INewGroup = {
   name: string;
   permissions: Array<Permission>;

@@ -1,5 +1,22 @@
+'use strict';
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('Groups', {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.STRING,
+      },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      permissions: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+      },
+    });
+
     await queryInterface.createTable('Users', {
       id: {
         allowNull: false,
@@ -31,6 +48,24 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
+
+    await queryInterface.bulkInsert('Groups', [
+      {
+        id: '1',
+        name: 'Admin',
+        permissions: ['WRITE', 'READ', 'SHARE', 'DELETE', 'UPLOAD_FILES'],
+      },
+      {
+        id: '2',
+        name: 'Moderator',
+        permissions: ['WRITE', 'READ', 'SHARE'],
+      },
+      {
+        id: '3',
+        name: 'User',
+        permissions: ['READ'],
+      },
+    ]);
 
     await queryInterface.bulkInsert('Users', [
       {

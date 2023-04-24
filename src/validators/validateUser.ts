@@ -1,13 +1,5 @@
-import Joi, { ValidationError } from 'joi';
-
-const mapJoiErrors = (error: ValidationError) =>
-  error.details.reduce(
-    (errors, error) => ({
-      ...errors,
-      [error.path[0]]: error.message,
-    }),
-    {}
-  );
+import Joi from 'joi';
+import { mapJoiErrors } from '../utils';
 
 const passwordPattern = /(?=.*[A-Za-z])(?=.*[0-9])/;
 
