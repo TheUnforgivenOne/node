@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import UserController from './controllers/UserController';
 import GroupController from './controllers/GroupController';
 import getDbConnection from './data-access/dbConnection';
+import init_relations from './data-access/models/init_relations';
 
 (async () => {
   try {
@@ -10,6 +11,7 @@ import getDbConnection from './data-access/dbConnection';
     const PORT = process.env.PORT ?? 4000;
 
     await getDbConnection().authenticate();
+    init_relations();
 
     const app = express();
     const userController = new UserController();

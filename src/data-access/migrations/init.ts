@@ -2,54 +2,41 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Groups', {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        type: Sequelize.STRING,
-      },
-      name: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      permissions: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
-      },
-    });
+    // Init tables
+    await queryInterface.sequelize.query(
+      `
+        CREATE TABLE IF NOT EXISTS "group" (
+          id varchar(128) PRIMARY KEY,
+          name varchar(50) NOT NULL,
+          permissions text ARRAY
+        );
+      `
+    );
 
-    await queryInterface.createTable('Users', {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        type: Sequelize.STRING,
-      },
-      login: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      password: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      age: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-      },
-      isDeleted: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN,
-      },
-      createdAt: {
-        allowNull: true,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: true,
-        type: Sequelize.DATE,
-      },
-    });
+    await queryInterface.sequelize.query(
+      `
+        CREATE TABLE IF NOT EXISTS "user" (
+          id varchar(128) PRIMARY KEY,
+          login varchar(50) NOT NULL,
+          password varchar(50) NOT NULL,
+          age integer NOT NULL,
+          is_deleted boolean NOT NULL
+        );
+      `
+    );
 
-    await queryInterface.bulkInsert('Groups', [
+    await queryInterface.sequelize.query(
+      `
+        CREATE TABLE IF NOT EXISTS "user_group" (
+          id varchar(128) PRIMARY KEY,
+          user_id varchar(128) NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
+          group_id varchar(128) NOT NULL REFERENCES "group" (id) ON DELETE CASCADE
+        );
+      `
+    );
+
+    // Fill tables
+    await queryInterface.bulkInsert('group', [
       {
         id: '1',
         name: 'Admin',
@@ -67,27 +54,50 @@ module.exports = {
       },
     ]);
 
-    await queryInterface.bulkInsert('Users', [
+    await queryInterface.bulkInsert('user', [
       {
         id: '1',
         login: 'User1',
         password: 'User1',
         age: 25,
-        isDeleted: false,
+        is_deleted: false,
       },
       {
         id: '2',
         login: 'User2',
         password: 'User2',
         age: 25,
-        isDeleted: false,
+        is_deleted: false,
       },
       {
         id: '3',
         login: 'User3',
         password: 'User3',
         age: 25,
-        isDeleted: false,
+        is_deleted: false,
+      },
+    ]);
+
+    await queryInterface.bulkInsert('user_group', [
+      {
+        id: '1',
+        user_id: '1',
+        group_id: '1',
+      },
+      {
+        id: '2',
+        user_id: '1',
+        group_id: '2',
+      },
+      {
+        id: '3',
+        user_id: '2',
+        group_id: '3',
+      },
+      {
+        id: '4',
+        user_id: '3',
+        group_id: '3',
       },
     ]);
   },

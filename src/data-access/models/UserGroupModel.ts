@@ -1,24 +1,27 @@
 import { DataTypes } from 'sequelize';
 import getDbConnection from '../dbConnection';
 
-let groupModel;
+let userGroupModel;
 
-const getGroupModel = () => {
-  if (!groupModel) {
-    groupModel = getDbConnection().define(
-      'group',
+const getUserGroupModel = () => {
+  if (!userGroupModel) {
+    userGroupModel = getDbConnection().define(
+      'user_group',
       {
         id: {
           allowNull: false,
           primaryKey: true,
           type: DataTypes.STRING,
         },
-        name: {
+        userId: {
           allowNull: false,
           type: DataTypes.STRING,
+          field: 'user_id',
         },
-        permissions: {
-          type: DataTypes.ARRAY(DataTypes.STRING),
+        groupId: {
+          allowNull: false,
+          type: DataTypes.STRING,
+          field: 'group_id',
         },
       },
       {
@@ -28,7 +31,7 @@ const getGroupModel = () => {
     );
   }
 
-  return groupModel;
+  return userGroupModel;
 };
 
-export default getGroupModel;
+export default getUserGroupModel;

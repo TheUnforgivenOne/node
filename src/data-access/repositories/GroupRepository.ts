@@ -28,7 +28,7 @@ class GroupRepository {
   }
 
   async delete(groupId) {
-    await getGroupModel().destroy({ where: { id: groupId } });
+    await getGroupModel().destroy({ where: { id: groupId }, cascade: true });
   }
 }
 
