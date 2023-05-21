@@ -15,6 +15,7 @@ class GroupController {
     this.router.post('/', validateNewGroup, this.create);
     this.router.put('/:id', validateUpdatedGroup, this.update);
     this.router.delete('/:id', this.delete);
+    this.router.post('/addTo/:id', this.addUsersToGroup);
   }
 
   private async getOne(req, res) {
@@ -52,6 +53,15 @@ class GroupController {
     const { id } = req.params;
 
     const data = await GroupService.deleteGroup(id);
+
+    res.json({ data });
+  }
+
+  private async addUsersToGroup(req, res) {
+    const { id } = req.params;
+    const { userIds } = req.body;
+
+    const data = await GroupService.addUsersToGroup(id, userIds);
 
     res.json({ data });
   }
