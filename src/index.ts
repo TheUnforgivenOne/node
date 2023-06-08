@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
 import UserController from './controllers/UserController';
 import GroupController from './controllers/GroupController';
 import getDbConnection from './data-access/dbConnection';
@@ -12,6 +13,10 @@ import logger from './middlewares/logger';
   try {
     dotenv.config();
     const PORT = process.env.PORT ?? 4000;
+    const corsOptions = {
+      origin: '*',
+      optionsSuccessStatus: 200,
+    };
 
     await getDbConnection().authenticate();
     init_relations();
@@ -22,6 +27,7 @@ import logger from './middlewares/logger';
     const groupController = new GroupController();
 
     app.use(express.json());
+    app.use(cors(corsOptions));
     app.use(apiLogger);
     app.use('/user', userController.router);
     app.use('/group', groupController.router);

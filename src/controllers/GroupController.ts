@@ -1,4 +1,6 @@
 import { Router, RouterOptions } from 'express';
+import catchErrors from '../decorators/catchErrors';
+import checkToken from '../middlewares/checkToken';
 import GroupService from '../services/GroupService';
 import {
   validateNewGroup,
@@ -10,14 +12,15 @@ class GroupController {
 
   constructor(options?: RouterOptions) {
     this.router = Router(options);
-    this.router.get('/:id', this.getOne);
-    this.router.get('/', this.getMany);
-    this.router.post('/', validateNewGroup, this.create);
-    this.router.put('/:id', validateUpdatedGroup, this.update);
-    this.router.delete('/:id', this.delete);
-    this.router.post('/addTo/:id', this.addUsersToGroup);
+    this.router.get('/:id', checkToken, this.getOne);
+    this.router.get('/', checkToken, this.getMany);
+    this.router.post('/', checkToken, validateNewGroup, this.create);
+    this.router.put('/:id', checkToken, validateUpdatedGroup, this.update);
+    this.router.delete('/:id', checkToken, this.delete);
+    this.router.post('/addTo/:id', checkToken, this.addUsersToGroup);
   }
 
+  @catchErrors
   private async getOne(req, res) {
     const { id } = req.params;
 
@@ -26,12 +29,14 @@ class GroupController {
     res.json({ data });
   }
 
+  @catchErrors
   private async getMany(req, res) {
     const data = await GroupService.getGroups();
 
     res.json({ data });
   }
 
+  @catchErrors
   private async create(req, res) {
     const newData = req.body;
 
@@ -40,6 +45,7 @@ class GroupController {
     res.json({ data });
   }
 
+  @catchErrors
   private async update(req, res) {
     const { id } = req.params;
     const updatedData = req.body;
@@ -49,6 +55,7 @@ class GroupController {
     res.json({ data });
   }
 
+  @catchErrors
   private async delete(req, res) {
     const { id } = req.params;
 
@@ -57,6 +64,7 @@ class GroupController {
     res.json({ data });
   }
 
+  @catchErrors
   private async addUsersToGroup(req, res) {
     const { id } = req.params;
     const { userIds } = req.body;
