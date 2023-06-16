@@ -8,9 +8,17 @@ import {
 } from '../validators/validateUser';
 
 class UserController {
+  private userService: typeof UserService;
   public router: Router;
 
-  constructor(options?: RouterOptions) {
+  constructor({
+    options,
+    userService,
+  }: {
+    options?: RouterOptions;
+    userService: typeof UserService;
+  }) {
+    this.userService = userService;
     this.router = Router(options);
     this.router.get('/:id', checkToken, this.getOne);
     this.router.get('/', checkToken, this.getMany);
@@ -24,14 +32,14 @@ class UserController {
   private async getOne(req, res) {
     const { id: userId } = req.params;
 
-    const user = await UserService.getUser(userId);
+    const user = await this.userService.getUser(userId);
 
     res.json({ data: { user } });
   }
 
   @catchErrors
   private async getMany(req, res) {
-    const users = await UserService.getUsers(req.query);
+    const users = await this.userService.getUsers(req.query);
 
     res.json({ data: { users } });
   }
@@ -40,7 +48,7 @@ class UserController {
   private async create(req, res) {
     const newUserData = req.body;
 
-    const newUser = await UserService.createUser(newUserData);
+    const newUser = await this.userService.createUser(newUserData);
 
     res.json({ data: { newUser } });
   }
@@ -50,7 +58,7 @@ class UserController {
     const { id: userId } = req.params;
     const updatedData = req.body;
 
-    const updatedUser = await UserService.updateUser(userId, updatedData);
+    const updatedUser = await this.userService.updateUser(userId, updatedData);
 
     res.json({ data: { updatedUser } });
   }
@@ -59,7 +67,7 @@ class UserController {
   private async delete(req, res) {
     const { id: userId } = req.params;
 
-    const deletedUser = await UserService.deleteUser(userId);
+    const deletedUser = await this.userService.deleteUser(userId);
 
     res.json({ data: { deletedUser } });
   }
@@ -68,7 +76,7 @@ class UserController {
   private async login(req, res) {
     const { username, password } = req.body;
 
-    const result = await UserService.login(username, password);
+    const result = await this.userService.login(username, password);
 
     res.json(result);
   }

@@ -8,9 +8,17 @@ import {
 } from '../validators/validateGroup';
 
 class GroupController {
+  private groupService: typeof GroupService;
   public router: Router;
 
-  constructor(options?: RouterOptions) {
+  constructor({
+    options,
+    groupService,
+  }: {
+    options?: RouterOptions;
+    groupService: typeof GroupService;
+  }) {
+    this.groupService = groupService;
     this.router = Router(options);
     this.router.get('/:id', checkToken, this.getOne);
     this.router.get('/', checkToken, this.getMany);
@@ -24,14 +32,14 @@ class GroupController {
   private async getOne(req, res) {
     const { id } = req.params;
 
-    const data = await GroupService.getGroup(id);
+    const data = await this.groupService.getGroup(id);
 
     res.json({ data });
   }
 
   @catchErrors
   private async getMany(req, res) {
-    const data = await GroupService.getGroups();
+    const data = await this.groupService.getGroups();
 
     res.json({ data });
   }
@@ -40,7 +48,7 @@ class GroupController {
   private async create(req, res) {
     const newData = req.body;
 
-    const data = await GroupService.createGroup(newData);
+    const data = await this.groupService.createGroup(newData);
 
     res.json({ data });
   }
@@ -50,7 +58,7 @@ class GroupController {
     const { id } = req.params;
     const updatedData = req.body;
 
-    const data = await GroupService.updateGroup(id, updatedData);
+    const data = await this.groupService.updateGroup(id, updatedData);
 
     res.json({ data });
   }
@@ -59,7 +67,7 @@ class GroupController {
   private async delete(req, res) {
     const { id } = req.params;
 
-    const data = await GroupService.deleteGroup(id);
+    const data = await this.groupService.deleteGroup(id);
 
     res.json({ data });
   }
@@ -69,7 +77,7 @@ class GroupController {
     const { id } = req.params;
     const { userIds } = req.body;
 
-    const data = await GroupService.addUsersToGroup(id, userIds);
+    const data = await this.groupService.addUsersToGroup(id, userIds);
 
     res.json({ data });
   }
