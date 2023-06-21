@@ -29,7 +29,7 @@ class UserController {
   }
 
   @catchErrors
-  private async getOne(req, res) {
+  public async getOne(req, res) {
     const { id: userId } = req.params;
 
     const user = await this.userService.getUser(userId);
@@ -38,14 +38,14 @@ class UserController {
   }
 
   @catchErrors
-  private async getMany(req, res) {
+  public async getMany(req, res) {
     const users = await this.userService.getUsers(req.query);
 
     res.json({ data: { users } });
   }
 
   @catchErrors
-  private async create(req, res) {
+  public async create(req, res) {
     const newUserData = req.body;
 
     const newUser = await this.userService.createUser(newUserData);
@@ -54,7 +54,7 @@ class UserController {
   }
 
   @catchErrors
-  private async update(req, res) {
+  public async update(req, res) {
     const { id: userId } = req.params;
     const updatedData = req.body;
 
@@ -64,7 +64,7 @@ class UserController {
   }
 
   @catchErrors
-  private async delete(req, res) {
+  public async delete(req, res) {
     const { id: userId } = req.params;
 
     const deletedUser = await this.userService.deleteUser(userId);
@@ -73,7 +73,7 @@ class UserController {
   }
 
   @catchErrors
-  private async login(req, res) {
+  public async login(req, res) {
     const { username, password } = req.body;
 
     const result = await this.userService.login(username, password);

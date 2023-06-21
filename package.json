@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
+    "test": "jest",
     "db:migrate": "cd src/data-access && sequelize-cli db:migrate",
     "task11": "node src/task1/task_1_1.js",
     "task12": "node src/task1/task_1_2.js"
@@ -26,8 +27,10 @@
     "winston": "^3.9.0"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.2",
     "nodemon": "^2.0.22",
-    "sequelize-cli": "^6.6.0"
+    "sequelize-cli": "^6.6.0",
+    "ts-jest": "^29.1.0"
   },
   "repository": {
     "type": "git",
