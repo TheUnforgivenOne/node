@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
+    "db:create": "cd src/data-access && sequelize-cli db:create",
     "db:migrate": "cd src/data-access && sequelize-cli db:migrate",
     "task11": "node src/task1/task_1_1.js",
     "task12": "node src/task1/task_1_2.js"
