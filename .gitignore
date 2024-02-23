@@ -1,2 +1,6 @@
 node_modules
+
 .env
+
+# Config of db connection for migrations
+config.js
