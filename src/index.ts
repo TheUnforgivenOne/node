@@ -8,6 +8,8 @@ import init_relations from './data-access/models/init_relations';
 import apiLogger from './middlewares/apiLogger';
 import errorHandler from './middlewares/errorHandler';
 import logger from './middlewares/logger';
+import UserService from './services/UserService';
+import GroupService from './services/GroupService';
 
 (async () => {
   try {
@@ -23,8 +25,8 @@ import logger from './middlewares/logger';
 
     const app = express();
 
-    const userController = new UserController();
-    const groupController = new GroupController();
+    const userController = new UserController({ userService: UserService });
+    const groupController = new GroupController({ groupService: GroupService });
 
     app.use(express.json());
     app.use(cors(corsOptions));
