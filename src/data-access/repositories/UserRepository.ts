@@ -1,12 +1,16 @@
 import { Op } from 'sequelize';
 import { IUser } from '../../types/entities';
+import getGroupModel from '../models/GroupModel';
 import getUserModel from '../models/UserModel';
 
 class UserRepository {
   async getById(userId: string) {
     const foundUser = await getUserModel().findOne({
       where: { id: userId },
-      raw: true,
+      include: {
+        model: getGroupModel(),
+        through: { attributes: [] },
+      },
     });
 
     return foundUser;
@@ -17,7 +21,10 @@ class UserRepository {
       where: { login: { [Op.like]: `%${dbQuery.login}%` } },
       limit: dbQuery.limit,
       order: [['login', 'ASC']],
-      raw: true,
+      include: {
+        model: getGroupModel(),
+        through: { attributes: [] },
+      },
     });
 
     return foundUsers;
