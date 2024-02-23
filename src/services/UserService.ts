@@ -1,5 +1,6 @@
 import { IUser, INewUser } from '../types/entities';
 import { v4 as uuid } from 'uuid';
+import jwt from 'jsonwebtoken';
 import UserRepository from '../data-access/repositories/UserRepository';
 
 class UserService {
@@ -32,6 +33,20 @@ class UserService {
     await UserRepository.delete(id);
 
     return await UserRepository.getById(id);
+  }
+
+  async login(username: string, password: string) {
+    const users = await UserRepository.getMany({ login: username, limit: 1 });
+
+    if (!users.length || users?.[0]?.password !== password) {
+      throw new Error('Wrong username or password');
+    }
+
+    const token = jwt.sign(
+      { username },
+      process.env.JWT_SECRET ?? 'easy_secret'
+    );
+    return { token };
   }
 }
 
